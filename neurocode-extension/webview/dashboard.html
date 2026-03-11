@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeuroCode Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.27.0/cytoscape.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>NeuroCode Dashboard</h1>
+        <div id="health-badge">Grade: A</div>
+      </header>
+
+      <main>
+        <section id="stats">
+          <div class="card">
+            <h3>Code Health Score</h3>
+            <div class="score">85</div>
+          </div>
+          <div class="card">
+            <h3>Total Modules</h3>
+            <div id="module-count">0</div>
+          </div>
+          <div class="card">
+            <h3>Risk Alerts</h3>
+            <div id="risk-count">0</div>
+          </div>
+        </section>
+
+        <section id="viz">
+          <h3>Architecture Map</h3>
+          <div id="cy"></div>
+        </section>
+
+        <section id="alerts">
+          <h3>High Risk Files</h3>
+          <ul id="risk-list">
+            <!-- Dynamic content -->
+          </ul>
+        </section>
+      </main>
+    </div>
+    <script src="dashboard.js"></script>
+  </body>
+</html>
