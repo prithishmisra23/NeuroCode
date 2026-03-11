@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('NeuroCode.scanRepository', scanRepo),
         vscode.commands.registerCommand('NeuroCode.refactorSelection', refactorCode),
         vscode.commands.registerCommand('NeuroCode.predictBugs', predictBugs),
-        vscode.commands.registerCommand('NeuroCode.openDashboard', openDashboard)
+        vscode.commands.registerCommand('NeuroCode.openDashboard', () => openDashboard(context))
     ];
 
     context.subscriptions.push(...commands);

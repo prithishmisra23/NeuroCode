@@ -51,7 +51,7 @@ export function analyzeFile(filePath: string): AnalysisReport {
     };
 }
 
-function calculateGrade(complexity: number, smellCount: number): "A" | "B" | "C" | "D" {
+export function calculateGrade(complexity: number, smellCount: number): "A" | "B" | "C" | "D" {
     const score = complexity + smellCount * 2;
     if (score < 10) return "A";
     if (score < 20) return "B";
