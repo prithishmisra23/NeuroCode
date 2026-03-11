@@ -31,18 +31,29 @@ export async function refactorCode() {
             const suggestion = await suggestRefactor(text, apiKey);
             
             const choice = await vscode.window.showInformationMessage(
-                `AI suggested refactor (${suggestion.risk_level} risk). Apply changes?`,
-                'View Explanation', 'Apply', 'Cancel'
+                `AI suggested refactor (${suggestion.risk_level} risk). Preview changes?`,
+                'View Explanation', 'Preview Diff', 'Cancel'
             );
 
             if (choice === 'View Explanation') {
                 vscode.window.showInformationMessage(suggestion.explanation);
-                // Recursive call to show buttons again or similar
-            } else if (choice === 'Apply') {
-                editor.edit(editBuilder => {
-                    editBuilder.replace(selection, suggestion.refactored_code);
-                });
-                vscode.window.showInformationMessage('Refactor applied successfully!');
+            } else if (choice === 'Preview Diff') {
+                // Create virtual documents for diffing
+                const originalUri = vscode.Uri.parse(`neurocode-preview:/original?${text}`);
+                const refactoredUri = vscode.Uri.parse(`neurocode-preview:/refactored?${suggestion.refactored_code}`);
+                
+                await vscode.commands.executeCommand('vscode.diff', originalUri, refactoredUri, 'NeuroCode Refactor Preview');
+                
+                const applyChoice = await vscode.window.showInformationMessage(
+                    "Apply these changes?", "Apply", "Discard"
+                );
+
+                if (applyChoice === "Apply") {
+                    editor.edit(editBuilder => {
+                        editBuilder.replace(selection, suggestion.refactored_code);
+                    });
+                    vscode.window.showInformationMessage('Refactor applied successfully!');
+                }
             }
         } catch (e: any) {
             vscode.window.showErrorMessage(`Refactor failed: ${e.message}`);

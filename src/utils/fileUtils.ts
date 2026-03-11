@@ -7,15 +7,17 @@ export function getProjectRoot(): string | undefined {
 }
 
 export async function getAllFiles(dir: string, extensions: string[]): Promise<string[]> {
+    const ignoreFolders = ['node_modules', '.git', 'dist', 'build', 'coverage', '.vscode', 'out'];
     let results: string[] = [];
     const list = fs.readdirSync(dir);
 
     for (let file of list) {
+        const baseName = file;
         file = path.resolve(dir, file);
         const stat = fs.statSync(file);
 
         if (stat && stat.isDirectory()) {
-            if (!file.includes('node_modules') && !file.includes('.git')) {
+            if (!ignoreFolders.includes(baseName)) {
                 results = results.concat(await getAllFiles(file, extensions));
             }
         } else {

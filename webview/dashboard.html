@@ -18,29 +18,44 @@
         <section id="stats">
           <div class="card">
             <h3>Code Health Score</h3>
-            <div class="score">85</div>
+            <div id="health-grade" class="score">B+</div>
+            <div class="sub-text">Overall Repository Quality</div>
           </div>
           <div class="card">
-            <h3>Total Modules</h3>
-            <div id="module-count">0</div>
+            <h3>Complexity</h3>
+            <div id="repo-complexity" class="score">Medium</div>
+            <div class="sub-text">Logic Branching Density</div>
           </div>
           <div class="card">
-            <h3>Risk Alerts</h3>
-            <div id="risk-count">0</div>
+            <h3>Reliability</h3>
+            <div id="risk-summary" class="score">High</div>
+            <div class="sub-text">Bug Risk Index</div>
           </div>
         </section>
 
-        <section id="viz">
-          <h3>Architecture Map</h3>
-          <div id="cy"></div>
-        </section>
+        <div class="grid-container">
+          <section id="viz" class="panel">
+            <h3>Architecture Map</h3>
+            <div id="cy"></div>
+          </section>
 
-        <section id="alerts">
-          <h3>High Risk Files</h3>
-          <ul id="risk-list">
-            <!-- Dynamic content -->
-          </ul>
-        </section>
+          <div class="side-panels">
+            <section id="alerts" class="panel">
+              <h3>High Risk Files</h3>
+              <ul id="risk-list">
+                <!-- Dynamic content -->
+              </ul>
+            </section>
+
+            <section id="suggestions" class="panel">
+              <h3>Refactor Suggestions</h3>
+              <div id="suggestion-count" class="count-badge">3 available</div>
+              <ul id="suggestion-list">
+                <!-- Dynamic content -->
+              </ul>
+            </section>
+          </div>
+        </div>
       </main>
     </div>
     <script src="dashboard.js"></script>

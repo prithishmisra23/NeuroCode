@@ -1,13 +1,16 @@
 {
-  "name": "neurocode",
+  "publisher": "NeuroCode",
   "displayName": "NeuroCode",
-  "description": "AI-powered code intelligence for analysis, visualization, and refactoring.",
+  "description": "AI-powered code intelligence engine for VS Code",
   "version": "0.0.1",
+  "icon": "assets/icon.png",
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Linters",
+    "Programming Languages"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
@@ -29,7 +32,17 @@
         "command": "NeuroCode.openDashboard",
         "title": "NeuroCode: Open Dashboard"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "NeuroCode",
+      "properties": {
+        "neurocode.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Groq API key for NeuroCode AI features"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

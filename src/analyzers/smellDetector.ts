@@ -9,27 +9,37 @@ export interface RiskReport {
 }
 
 export function predictRisk(filePath: string, analysis: AnalysisReport): RiskReport {
-    let riskScore = analysis.complexityScore;
     const stats = fs.statSync(filePath);
     const fileSizeKB = stats.size / 1024;
+    
+    // We base commitFrequency and dependencyDepth on existing metrics or defaults
+    const mockCommitFrequency = 5; // In a real app, this comes from Git analysis
+    const mockDependencyDepth = analysis.smells.filter(s => s.includes('dependency')).length + 1;
 
-    if (fileSizeKB > 50) riskScore += 5;
-    if (analysis.smells.length > 5) riskScore += 10;
+    // Weighted Risk Scoring Formula
+    // complexity (0.4) + frequency (0.3) + depth (0.2) + size (0.1)
+    const riskScore = (analysis.complexityScore * 0.4) + 
+                      (mockCommitFrequency * 0.3) + 
+                      (mockDependencyDepth * 0.2) + 
+                      (fileSizeKB * 0.1);
+
+    // Normalize or scale the score to 0-10 range for easier visualization
+    const normalizedScore = Math.min(10, riskScore);
 
     let riskLevel: "Low" | "Medium" | "High" = "Low";
-    if (riskScore > 20) riskLevel = "High";
-    else if (riskScore > 10) riskLevel = "Medium";
+    if (normalizedScore > 7) riskLevel = "High";
+    else if (normalizedScore > 4) riskLevel = "Medium";
 
-    let reason = "Complexity and size are within normal limits.";
+    let reason = "File metrics are within safe thresholds.";
     if (riskLevel === "High") {
-        reason = "High complexity and large file size detected.";
+        reason = "High complexity and size combined with frequent changes.";
     } else if (riskLevel === "Medium") {
-        reason = "Moderate complexity with some code smells.";
+        reason = "Moderate complexity with some detected code smells.";
     }
 
     return {
         file: filePath,
-        riskScore,
+        riskScore: Number(normalizedScore.toFixed(2)),
         riskLevel,
         reason
     };

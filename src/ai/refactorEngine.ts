@@ -10,17 +10,26 @@ export interface RefactorResponse {
 
 export async function suggestRefactor(code: string, apiKey: string): Promise<RefactorResponse> {
     const prompt = `
+        You are a senior software engineer. 
         Refactor the following code for better readability, performance, and lower complexity.
-        Return a JSON object with:
+        
+        Rules:
+        - Maintain functionality strictly.
+        - Reduce cyclomatic complexity.
+        - Follow industry best practices (SOLID, DRY).
+        - Avoid breaking changes.
+        - Return the response in JSON format.
+
+        JSON structure:
         {
-            "refactored_code": "...",
-            "explanation": "...",
+            "refactored_code": "the refactored code string",
+            "explanation": "concise explanation of changes",
             "complexity_before": number,
             "complexity_after": number,
-            "risk_level": "low/medium/high"
+            "risk_level": "low|medium|high"
         }
         
-        Code:
+        Code to refactor:
         ${code}
     `;
 

@@ -29,22 +29,29 @@ export async function openDashboard(context: vscode.ExtensionContext) {
 
     panel.webview.html = html;
 
-    // Load data
-    const projectData = await scanRepository();
-    const graph = buildDependencyGraph(projectData);
-    const risks = projectData.files.slice(0, 10).map(file => {
-        const fullPath = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, file);
-        const analysis = analyzeFile(fullPath);
-        return predictRisk(file, analysis);
-    });
+    // Load data with Progress
+    vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: "NeuroCode: Generating dashboard metrics...",
+        cancellable: false
+    }, async () => {
+        const projectData = await scanRepository();
+        const graph = buildDependencyGraph(projectData);
+        const risks = projectData.files.slice(0, 10).map(file => {
+            const workspaceRoot = vscode.workspace.workspaceFolders![0].uri.fsPath;
+            const fullPath = path.isAbsolute(file) ? file : path.join(workspaceRoot, file);
+            const analysis = analyzeFile(fullPath);
+            return predictRisk(file, analysis);
+        });
 
-    panel.webview.postMessage({
-        type: 'update',
-        data: {
-            files: projectData.files,
-            graph,
-            risks
-        }
+        panel.webview.postMessage({
+            type: 'update',
+            data: {
+                files: projectData.files,
+                graph,
+                risks
+            }
+        });
     });
 
     panel.webview.onDidReceiveMessage(message => {
